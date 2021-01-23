@@ -45,7 +45,7 @@ const useMoneda = (label, stateInicial, listado) => {
 
     )
 
-    return [moneda, guardarMoneda, Seleccionar];
+    return [moneda,  Seleccionar];
 }
  
 export default useMoneda;

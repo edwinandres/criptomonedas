@@ -45,7 +45,7 @@ const useCriptoMoneda = (label, stateInicial, listado) => {
 
     )
 
-    return [moneda, guardarMoneda, SeleccionarCripto];
+    return [moneda,  SeleccionarCripto];
 }
  
 export default useCriptoMoneda;

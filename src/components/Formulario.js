@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import useMoneda from '../hooks/useMoneda'
 import useCriptoMoneda from '../hooks/useCriptoMoneda';
 import axios from 'axios';
+import Error from './Error'
 
 const Boton = styled.input`
     margin-top: 20px;
@@ -31,15 +32,17 @@ const Monedas=[
 //listaCripto=[lista]
 
 
-const Formulario = () => {
+const Formulario = ({ guardarMoneda, guardarCripto }) => {
     //state formulario
-    const[listaCripto, guardarListaCripto]=useState([])
-    //usar useMoneda
-    const [moneda, guardarMoneda, Seleccionar] = useMoneda('Seleccione su moneda','', Monedas)
-    //usar useCriptoMoneda
-    const [cripto, guardarCripto, SeleccionarCripto] = useCriptoMoneda('Seleccione Criptomoneda','',listaCripto)
-    
+    const [listaCripto, guardarListaCripto]=useState([])
+    const [error, guardarError] = useState(false)
 
+    //usar useMoneda
+    const [moneda,  Seleccionar] = useMoneda('Seleccione su moneda','', Monedas)
+    //usar useCriptoMoneda
+    const [cripto,  SeleccionarCripto] = useCriptoMoneda('Seleccione Criptomoneda','',listaCripto)
+    
+    
     useEffect(() => {
 
         const consultarAPI = async() =>{
@@ -54,11 +57,29 @@ const Formulario = () => {
         
 
     },[])
+
+    const cotizarCriptomoneda = e => {
+        e.preventDefault()
+
+        //validar campos vacios
+        if(moneda === '' || cripto === ''){
+            guardarError(true)
+            return;
+        }
+
+        //guardar el state
+        guardarError(false)
+        guardarMoneda(moneda)
+        guardarCripto(cripto)
+    }
     
     
     return ( 
 
-        <form>
+        <form
+            onSubmit={cotizarCriptomoneda}
+        >
+            {error?<Error mensaje={'Todos los campos son obligatorios'}/>:null}
             <Seleccionar />
             <SeleccionarCripto/>
             <Boton
